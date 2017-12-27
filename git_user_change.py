@@ -5,6 +5,11 @@ import os
 
 
 def check_eniv(easy_tk_url):
+    # check git eniv
+    if os.system('git --version') != 0:
+        raise (ImportError, 'Git may not be in your system path.')
+
+    # check easy_tk
     if 'easy_tk' in os.listdir('.'):
         os.chdir('easy_tk')
         if '.git' in os.listdir('.'):
