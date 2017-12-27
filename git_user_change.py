@@ -5,22 +5,26 @@ import os
 
 
 def check_eniv(easy_tk_url):
-    # check git eniv
-    if os.system('git --version') != 0:
-        raise (ImportError, 'Git may not be in your system path.')
 
-    # check easy_tk
-    if 'easy_tk' in os.listdir('.'):
-        os.chdir('easy_tk')
-        if '.git' in os.listdir('.'):
-            _command = 'git pull --rebase'
+    try:
+        import easy_tk
+    except:
+        # check git eniv
+        if os.system('git --version') != 0:
+            raise (ImportError, 'Git may not be in your system path.')
+
+        # check easy_tk
+        if 'easy_tk' in os.listdir('.'):
+            os.chdir('easy_tk')
+            if '.git' in os.listdir('.'):
+                _command = 'git pull --rebase'
+            else:
+                raise (ImportError, 'easy_tk doe not contains .git')
+            os.system(_command)
+            os.chdir('..')
         else:
-            raise (ImportError, 'easy_tk doe not contains .git')
-        os.system(_command)
-        os.chdir('..')
-    else:
-        _command = 'git clone {}'.format(easy_tk_url)
-        os.system(_command)
+            _command = 'git clone {}'.format(easy_tk_url)
+            os.system(_command)
 
 
 def set_git(user_choice):
