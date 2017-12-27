@@ -4,9 +4,15 @@ GIT_DICT = {
         'username': 'Feng Zhangchi',
         'email': '123456789@qq.com'
     },
+
     'GITHUB': {
         'username': 'williamfzc',
-        'email': '123456789@qq.com'
+        'email': '246@qq.com'
+    },
+
+    'SOMETHING_ELSE': {
+        'username': 'abc',
+        'email': '135@qq.com'
     }
 }
 

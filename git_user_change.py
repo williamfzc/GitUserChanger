@@ -24,10 +24,14 @@ def set_git(user_choice):
     os.system('{} user.email "{}"'.format(COMMAND, git_info['email']))
 
 
-def get_cur_git():
+def get_cur_git(_result_dict):
     _username = os.popen(COMMAND+' user.name').readline().strip('\n')
     _password = os.popen(COMMAND+' user.email').readline().strip('\n')
-    return 'Now git user is: \n{}\n{}'.format(_username, _password)
+    _old_str = 'Old git user is: \n{}\n{} \n\n'.format(_username, _password)
+    _git_info = GIT_DICT[_result_dict[0][1]]
+    _new_str = 'New git user is: \n{}\n{} \n'.format(
+        _git_info['username'], _git_info['email'])
+    return _old_str + _new_str
 
 
 if __name__ == '__main__':
