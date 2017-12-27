@@ -1,33 +1,57 @@
-TP_INFO = {
-    'username': 'Feng Zhangchi',
-    'email': '123456789@qq.com'
-}
+COMMAND = 'git config --global'
 
-GITHUB_INFO = {
-    'username': 'williamfzc',
-    'email': '123456789@qq.com'
-}
-
-
+from git_conf import GIT_DICT, EASY_TK_URL
 import os
 
 
-COMMAND = 'git config --global'
-
-def set_git(_input):
-    _status = _input.lower()
-    if _status == 'tp':
-        os.system('{} user.name "{}"'.format(COMMAND, TP_INFO['username']))
-        os.system('{} user.email "{}"'.format(COMMAND, TP_INFO['email']))
+def check_eniv(easy_tk_url):
+    if 'easy_tk' in os.listdir('.'):
+        os.chdir('easy_tk')
+        if '.git' in os.listdir('.'):
+            _command = 'git pull --rebase'
+        else:
+            raise (ImportError, 'easy_tk doe not contains .git')
+        os.system(_command)
+        os.chdir('..')
     else:
-        os.system('{} user.name "{}"'.format(COMMAND, GITHUB_INFO['username']))
-        os.system('{} user.email "{}"'.format(COMMAND, GITHUB_INFO['email']))
-
-def get_git():
-    print(os.popen(COMMAND+' user.name').readline().strip('\n'))
-    print(os.popen(COMMAND+' user.email').readline().strip('\n'))
+        _command = 'git clone {}'.format(easy_tk_url)
+        os.system(_command)
 
 
-set_git('t')
-get_git()
+def set_git(user_choice):
+    git_info = GIT_DICT[user_choice]
+    os.system('{} user.name "{}"'.format(COMMAND, git_info['username']))
+    os.system('{} user.email "{}"'.format(COMMAND, git_info['email']))
+
+
+def get_cur_git():
+    _username = os.popen(COMMAND+' user.name').readline().strip('\n')
+    _password = os.popen(COMMAND+' user.email').readline().strip('\n')
+    return 'Now git user is: \n{}\n{}'.format(_username, _password)
+
+
+if __name__ == '__main__':
+
+    check_eniv(EASY_TK_URL)
+
+    try:
+        from easy_tk.easy_tk.window_builder import WindowBuilder
+    except ImportError:
+        raise (ImportError, 'easy_tk meet some error. Try to download manually.')
+
+    temp_dict = {
+        'info': 'CHOOSE YOUR GIT USER',
+        'widgets': {
+            'git users list': {
+                'type': 'choicelist',
+                'level': 'must',
+                'content': list(GIT_DICT.keys()),
+            }
+        },
+        'after': get_cur_git
+    }
+
+    result = WindowBuilder(temp_dict).get()[0][1]
+    set_git(result)
+
 
